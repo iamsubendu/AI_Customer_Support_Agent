@@ -1,0 +1,32 @@
+{
+  "name": "ai-customer-support-agent",
+  "version": "1.0.0",
+  "description": "Full-stack AI Customer Support Agent with React, Node.js, and MongoDB",
+  "scripts": {
+    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "server:dev": "cd server && npm run dev",
+    "client:dev": "cd client && npm run dev",
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+    "build": "cd client && npm run build",
+    "start": "cd server && npm start",
+    "docker:up": "docker-compose up --build",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "setup": "npm run install:all && npm run docker:up"
+  },
+  "keywords": [
+    "ai",
+    "customer-support",
+    "chat",
+    "react",
+    "nodejs",
+    "express",
+    "mongodb",
+    "docker"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
