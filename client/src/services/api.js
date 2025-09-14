@@ -1,4 +1,5 @@
 import axios from "axios";
+import ErrorHandler from "../utils/errorHandler";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -7,6 +8,7 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  timeout: 10000,
 });
 
 api.interceptors.request.use(
@@ -18,6 +20,7 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    ErrorHandler.handle(error, "Request interceptor");
     return Promise.reject(error);
   }
 );
@@ -25,10 +28,20 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    if (error.code === "NETWORK_ERROR" || !error.response) {
+      ErrorHandler.handleNetworkError();
+    } else if (error.response?.status === 401) {
+      ErrorHandler.handleAuthError();
       localStorage.removeItem("token");
       window.location.href = "/auth";
+    } else if (error.response?.status >= 500) {
+      ErrorHandler.handle(error, "Server error");
+    } else if (error.response?.status >= 400) {
+      ErrorHandler.handle(error, "Client error");
+    } else {
+      ErrorHandler.handle(error, "API error");
     }
+
     return Promise.reject(error);
   }
 );
