@@ -93,23 +93,15 @@ const checkAIService = async () => {
   }
 };
 
-// Only start the server if not in Vercel environment
-if (!process.env.VERCEL) {
-  const PORT = process.env.PORT || 5000;
+// Start the server
+const PORT = process.env.PORT || 5000;
 
-  app.listen(PORT, async () => {
-    console.log(`🚀 Server is running on port ${PORT}`);
-    console.log(
-      `🌐 Health check available at: http://localhost:${PORT}/health`
-    );
+app.listen(PORT, async () => {
+  console.log(`🚀 Server is running on port ${PORT}`);
+  console.log(`🌐 Health check available at: http://localhost:${PORT}/health`);
 
-    // Check AI service after server starts
-    await checkAIService();
-  });
-} else {
-  // For Vercel, just check AI service without starting server
-  console.log("🚀 Server running on Vercel");
-  checkAIService();
-}
+  // Check AI service after server starts
+  await checkAIService();
+});
 
 module.exports = app;

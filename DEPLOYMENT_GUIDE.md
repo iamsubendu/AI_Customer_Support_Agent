@@ -1,12 +1,19 @@
 # Deployment Guide
 
-This guide will help you deploy the AI Customer Support Agent application to Netlify (client) and Vercel (server).
+This guide will help you deploy the AI Customer Support Agent application to Netlify (client) and either Vercel or Render (server).
+
+## Choose Your Server Platform
+
+- **Vercel**: Serverless functions, good for simple APIs
+- **Render**: Traditional server deployment, better for persistent connections
+
+For this guide, we'll use **Render** for the server as it's more straightforward for Node.js applications.
 
 ## Prerequisites
 
 - GitHub account
 - Netlify account
-- Vercel account
+- Render account (or Vercel account)
 - MongoDB Atlas account (for production database)
 
 ## Environment Setup
@@ -19,7 +26,7 @@ Before deployment, you'll need to set up environment variables. We've provided e
 
 Copy these files to `.env` in their respective directories and update with your actual values.
 
-## 1. Deploy Server to Vercel
+## 1. Deploy Server to Render
 
 ### Step 1: Prepare Server for Vercel
 
