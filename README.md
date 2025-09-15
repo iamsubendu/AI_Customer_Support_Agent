@@ -1,6 +1,6 @@
 # 🧠 AI Customer Support Agent
 
-A full-stack AI-powered customer support chat application built with React, Node.js, Express, MongoDB, and OpenRouter.ai integration.
+A full-stack AI-powered customer support chat application built with React, Node.js, Express, MongoDB, and OpenRouter.ai integration. Features embedded message storage, modern UI, and deployment-ready configuration for both Vercel and Render.
 
 ## 🚀 Features
 
@@ -15,10 +15,11 @@ A full-stack AI-powered customer support chat application built with React, Node
 
 - **Real-time chat interface** with modern UI
 - **AI-powered responses** using OpenRouter.ai
-- **Chat history storage** in MongoDB (user-scoped)
+- **Embedded message storage** - messages stored directly in chat documents
 - **Multiple conversation support** with chat management
 - **Typing indicators** for better UX
 - **Message timestamps** and conversation tracking
+- **Optimistic UI updates** for smooth user experience
 
 ### 🧠 AI Integration
 
@@ -38,50 +39,55 @@ A full-stack AI-powered customer support chat application built with React, Node
 
 ### 🌐 Frontend Features
 
-- **React 18** with modern hooks
+- **React 18** with modern hooks and Vite
+- **Redux Toolkit** for state management
 - **Responsive design** for mobile and desktop
 - **Real-time updates** with optimistic UI
 - **Toast notifications** for user feedback
-- **Context-based state management**
+- **Environment-based configuration**
 - **Axios for API communication**
 
-### 🐳 DevOps
+### 🐳 DevOps & Deployment
 
 - **Docker containerization** for all services
-- **Docker Compose** for easy deployment
-- **Nginx reverse proxy** for production
-- **Health checks** for service monitoring
+- **Docker Compose** for easy local deployment
+- **Vercel deployment** configuration for serverless
+- **Render deployment** configuration for traditional hosting
+- **Netlify deployment** for frontend
 - **Environment configuration** management
+- **Automated build scripts**
 
 ## 🛠️ Tech Stack
 
-| Layer                | Technology                          |
-| -------------------- | ----------------------------------- |
-| **Frontend**         | React 18, Vite, Axios, React Router |
-| **Backend**          | Node.js, Express.js, JWT, bcryptjs  |
-| **Database**         | MongoDB with Mongoose ODM           |
-| **AI Service**       | OpenRouter.ai API                   |
-| **Authentication**   | JWT + bcryptjs                      |
-| **Containerization** | Docker, Docker Compose              |
-| **Web Server**       | Nginx (production)                  |
-| **Styling**          | Custom CSS with modern design       |
+| Layer                | Technology                           |
+| -------------------- | ------------------------------------ |
+| **Frontend**         | React 18, Vite, Redux Toolkit, Axios |
+| **Backend**          | Node.js, Express.js, JWT, bcryptjs   |
+| **Database**         | MongoDB with Mongoose ODM            |
+| **AI Service**       | OpenRouter.ai API                    |
+| **Authentication**   | JWT + bcryptjs                       |
+| **State Management** | Redux Toolkit                        |
+| **Deployment**       | Vercel, Render, Netlify              |
+| **Containerization** | Docker, Docker Compose               |
+| **Styling**          | Custom CSS with modern design        |
 
 ## 📦 Installation & Setup
 
 ### Prerequisites
 
-- Docker and Docker Compose
 - Node.js 18+ (for local development)
 - MongoDB Atlas account (for production) or local MongoDB
 - OpenRouter.ai API key
+- Git (for cloning the repository)
+- Docker and Docker Compose (optional, for containerized deployment)
 
-### Quick Start with Docker
+### Quick Start
 
 1. **Clone the repository**
 
    ```bash
-   git clone <repository-url>
-   cd AI_Customer_support_agent
+   git clone https://github.com/iamsubendu/AI_Customer_Support_Server.git
+   cd AI_Customer_Support_Server
    ```
 
 2. **Set up environment variables**
@@ -99,56 +105,109 @@ A full-stack AI-powered customer support chat application built with React, Node
    # - CORS origin
    ```
 
-3. **Start the application**
+3. **Install dependencies and start**
 
    ```bash
-   docker-compose up --build
+   # Install all dependencies
+   npm run install:all
+
+   # Start both client and server
+   npm run dev
    ```
 
 4. **Access the application**
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:5000
-   - MongoDB: localhost:27017
+   - Health Check: http://localhost:5000/health
 
-### Local Development
+### Docker Deployment (Optional)
 
-1. **Backend Setup**
+```bash
+# Start with Docker Compose
+docker-compose up --build
 
-   ```bash
-   cd server
-   npm install
-   cp env.example .env
-   # Edit .env with your configuration
-   npm run dev
-   ```
+# Access the application
+# Frontend: http://localhost:3000
+# Backend API: http://localhost:5000
+```
 
-2. **Frontend Setup**
-   ```bash
-   cd client
-   npm install
-   cp env.example .env
-   # Edit .env with your configuration
-   npm run dev
-   ```
+### Development Scripts
+
+```bash
+# Install all dependencies
+npm run install:all
+
+# Start both client and server in development mode
+npm run dev
+
+# Start only the server
+npm run server:dev
+
+# Start only the client
+npm run client:dev
+
+# Build the client for production
+npm run build
+
+# Start production server
+npm start
+```
 
 ## 🔧 Configuration
 
 ### Environment Variables
 
-#### Server (.env)
+#### Root (.env)
 
 ```env
+# Client Configuration
+VITE_API_URL=http://localhost:5000
+
+# Server Configuration
 PORT=5000
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/ai-support
-JWT_SECRET=your-super-secret-jwt-key-here
-OPENROUTER_API_KEY=your-openrouter-api-key-here
 NODE_ENV=development
+
+# Database Configuration
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/ai-customer-support
+
+# JWT Configuration
+JWT_SECRET=your-super-secret-jwt-key-here
+
+# AI Service Configuration
+OPENROUTER_API_KEY=your-openrouter-api-key-here
+
+# CORS Configuration
+CORS_ORIGIN=http://localhost:3000
 ```
 
-#### Client (.env)
+#### Server (server/.env)
 
 ```env
+# Server Configuration
+PORT=5000
+NODE_ENV=development
+
+# Database Configuration
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/ai-customer-support
+
+# JWT Configuration
+JWT_SECRET=your-super-secret-jwt-key-here
+
+# AI Service Configuration
+OPENROUTER_API_KEY=your-openrouter-api-key-here
+
+# CORS Configuration
+CORS_ORIGIN=http://localhost:3000
+```
+
+#### Client (client/.env)
+
+```env
+# API Configuration
 VITE_API_URL=http://localhost:5000
+
+# For production, change to your server URL:
+# VITE_API_URL=https://your-server-app.vercel.app
 ```
 
 ### MongoDB Setup
@@ -176,25 +235,39 @@ VITE_API_URL=http://localhost:5000
 ## 📁 Project Structure
 
 ```
-AI_Customer_support_agent/
-├── client/                 # React frontend
+AI_Customer_Support_Server/
+├── client/                    # React frontend
 │   ├── public/
+│   │   └── _redirects         # Netlify SPA routing
 │   ├── src/
-│   │   ├── components/     # React components
-│   │   ├── contexts/       # React contexts
-│   │   ├── services/       # API services
-│   │   └── main.jsx
-│   ├── Dockerfile
+│   │   ├── components/        # React components
+│   │   │   ├── auth/         # Authentication components
+│   │   │   ├── chat/         # Chat components
+│   │   │   └── custom/       # Reusable UI components
+│   │   ├── config/           # Configuration files
+│   │   ├── hooks/            # Custom React hooks
+│   │   ├── services/         # API services
+│   │   ├── store/            # Redux store and slices
+│   │   └── utils/            # Utility functions
+│   ├── netlify.toml          # Netlify configuration
+│   ├── env.example           # Environment variables template
 │   └── package.json
-├── server/                 # Node.js backend
-│   ├── models/            # MongoDB models
-│   ├── routes/            # API routes
-│   ├── middleware/        # Custom middleware
-│   ├── services/          # Business logic
-│   ├── Dockerfile
+├── server/                    # Node.js backend
+│   ├── config/               # Configuration files
+│   ├── middleware/           # Custom middleware
+│   ├── models/               # MongoDB models (Chat with embedded messages)
+│   ├── routes/               # API routes
+│   ├── services/             # Business logic (AI service)
+│   ├── api/                  # Vercel serverless functions
+│   ├── Dockerfile            # Docker configuration
+│   ├── vercel.json           # Vercel configuration
+│   ├── render.yaml           # Render configuration
+│   ├── env.example           # Environment variables template
 │   └── package.json
-├── docker-compose.yml     # Docker services
-├── mongo-init.js         # MongoDB initialization
+├── docker-compose.yml        # Docker services
+├── mongo-init.js            # MongoDB initialization
+├── deploy.sh                # Deployment script
+├── env.example              # Root environment variables
 └── README.md
 ```
 
@@ -237,19 +310,104 @@ AI_Customer_support_agent/
 
 ## 🚀 Deployment
 
-### Production Deployment
+### Current Deployment Setup
 
-1. **Update environment variables** for production
-2. **Configure MongoDB Atlas** for production database
-3. **Set up domain and SSL** certificates
-4. **Deploy using Docker Compose** or container orchestration
+This project is currently deployed using:
 
-### Hosting Options
+- **Frontend**: Netlify (https://your-app.netlify.app)
+- **Backend**: Render (https://your-app.onrender.com)
 
-- **Vercel** (Frontend) + **Railway/Render** (Backend)
-- **Docker Compose** on VPS
-- **Kubernetes** for scalable deployment
-- **AWS/GCP/Azure** with container services
+### Quick Deployment
+
+Use the provided deployment script:
+
+```bash
+# Prepare for deployment
+./deploy.sh
+
+# Follow the instructions for your chosen platform
+```
+
+### Platform-Specific Deployment
+
+#### Option 1: Render + Netlify (Current Setup)
+
+**Server (Render):**
+
+1. Connect your GitHub repository to Render
+2. Create a new Web Service
+3. Set root directory to `server`
+4. Set build command to `npm install`
+5. Set start command to `node server.js`
+6. Add environment variables
+7. Deploy and get your Render URL (e.g., `https://your-app.onrender.com`)
+
+**Client (Netlify):**
+
+1. Connect your GitHub repository to Netlify
+2. Set base directory to `client`
+3. Set build command to `npm run build`
+4. Set publish directory to `client/dist`
+5. Add environment variable: `VITE_API_URL=https://your-app.onrender.com`
+6. Deploy and get your Netlify URL (e.g., `https://your-app.netlify.app`)
+
+**Update CORS:**
+
+1. Go back to Render dashboard
+2. Update `CORS_ORIGIN` environment variable to your Netlify URL
+3. Redeploy the server
+
+#### Option 2: Vercel + Netlify (Alternative)
+
+**Server (Vercel):**
+
+1. Connect your GitHub repository to Vercel
+2. Set root directory to `server`
+3. Add environment variables in Vercel dashboard
+4. Deploy automatically on push
+
+**Client (Netlify):**
+
+1. Same as Option 1, but use Vercel URL for `VITE_API_URL`
+
+#### Option 3: Docker Compose
+
+```bash
+# Deploy with Docker Compose
+docker-compose up --build -d
+
+# Access the application
+# Frontend: http://localhost:3000
+# Backend: http://localhost:5000
+```
+
+### Environment Variables for Production
+
+#### Render (Server) - Your Current Setup
+
+```
+NODE_ENV=production
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/ai-customer-support
+JWT_SECRET=your-super-secret-jwt-key-here
+OPENROUTER_API_KEY=your-openrouter-api-key-here
+CORS_ORIGIN=https://your-netlify-app.netlify.app
+```
+
+#### Netlify (Client) - Your Current Setup
+
+```
+VITE_API_URL=https://your-server-app.onrender.com
+```
+
+#### Vercel (Server) - Alternative
+
+```
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/ai-customer-support
+JWT_SECRET=your-super-secret-jwt-key-here
+OPENROUTER_API_KEY=your-openrouter-api-key-here
+NODE_ENV=production
+CORS_ORIGIN=https://your-netlify-app.netlify.app
+```
 
 ## 🧪 Testing
 
@@ -285,8 +443,23 @@ curl -X POST http://localhost:5000/auth/signup \
    - Rebuild containers: `docker-compose up --build --force-recreate`
 
 4. **CORS Errors**
-   - Check API URL configuration
-   - Verify CORS settings in server
+
+   - Check API URL configuration in Netlify
+   - Verify CORS settings in Render server
+   - Ensure `CORS_ORIGIN` in Render matches your Netlify URL
+
+5. **Render Deployment Issues**
+
+   - Check that `render.yaml` is properly configured
+   - Verify environment variables are set in Render dashboard
+   - Check build logs for specific errors
+   - Ensure `package-lock.json` exists in server directory
+
+6. **Netlify Build Issues**
+   - Check that `netlify.toml` is properly configured
+   - Verify build command and publish directory settings
+   - Check that `VITE_API_URL` environment variable is set
+   - Review build logs for specific errors
 
 ## 🤝 Contributing
 
