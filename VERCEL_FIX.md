@@ -63,7 +63,7 @@ Make sure these are set in your Vercel project settings:
 ```
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/ai-customer-support
 JWT_SECRET=your-super-secret-jwt-key-here
-OPENAI_API_KEY=your-openai-api-key-here
+OPENROUTER_API_KEY=your-openrouter-api-key-here
 NODE_ENV=production
 CORS_ORIGIN=https://your-netlify-app.netlify.app
 ```

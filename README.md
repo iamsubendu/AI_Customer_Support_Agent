@@ -88,11 +88,15 @@ A full-stack AI-powered customer support chat application built with React, Node
 
    ```bash
    # Copy environment files
+   cp env.example .env
    cp server/env.example server/.env
    cp client/env.example client/.env
 
-   # Edit server/.env and add your OpenRouter API key
-   OPENROUTER_API_KEY=your-openrouter-api-key-here
+   # Edit the .env files and add your configuration:
+   # - OpenRouter API key
+   # - MongoDB connection string
+   # - JWT secret
+   # - CORS origin
    ```
 
 3. **Start the application**
@@ -168,11 +172,6 @@ VITE_API_URL=http://localhost:5000
 1. Sign up at [OpenRouter.ai](https://openrouter.ai/)
 2. Get your API key from the dashboard
 3. Add it to your server `.env` file
-
-#### Alternative: Hugging Face
-
-- Update the AI service configuration in `server/services/aiService.js`
-- Add your Hugging Face API key to the environment variables
 
 ## 📁 Project Structure
 

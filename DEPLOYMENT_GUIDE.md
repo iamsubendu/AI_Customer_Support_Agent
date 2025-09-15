@@ -9,6 +9,16 @@ This guide will help you deploy the AI Customer Support Agent application to Net
 - Vercel account
 - MongoDB Atlas account (for production database)
 
+## Environment Setup
+
+Before deployment, you'll need to set up environment variables. We've provided example files:
+
+- `env.example` - Root directory environment variables
+- `server/env.example` - Server-specific environment variables
+- `client/env.example` - Client-specific environment variables
+
+Copy these files to `.env` in their respective directories and update with your actual values.
+
 ## 1. Deploy Server to Vercel
 
 ### Step 1: Prepare Server for Vercel
@@ -47,7 +57,7 @@ This guide will help you deploy the AI Customer Support Agent application to Net
    ```
    MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/ai-customer-support
    JWT_SECRET=your-super-secret-jwt-key-here
-   OPENAI_API_KEY=your-openai-api-key-here
+   OPENROUTER_API_KEY=your-openrouter-api-key-here
    NODE_ENV=production
    CORS_ORIGIN=https://your-netlify-app.netlify.app
    ```

@@ -133,37 +133,6 @@ class AIService {
       return "I apologize, but I'm having trouble connecting to my AI service right now. Please try again in a moment, or contact our support team directly.";
     }
   }
-
-  async generateResponseHuggingFace(messages) {
-    try {
-      const lastMessage = messages[messages.length - 1];
-      const userMessage = lastMessage.content;
-
-      const response = await axios.post(
-        "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium",
-        {
-          inputs: userMessage,
-          parameters: {
-            max_length: 200,
-            temperature: 0.7,
-          },
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.HUGGING_FACE_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      return (
-        response.data.generated_text ||
-        "I'm here to help! How can I assist you today?"
-      );
-    } catch (error) {
-      return "I'm here to help! How can I assist you today?";
-    }
-  }
 }
 
 module.exports = new AIService();
