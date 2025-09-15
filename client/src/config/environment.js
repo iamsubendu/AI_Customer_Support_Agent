@@ -4,7 +4,7 @@ const getApiUrl = () => {
   if (import.meta.env.PROD) {
     // In production, use the Render deployment URL
     return (
-      import.meta.env.VITE_API_URL
+      import.meta.env.VITE_API_URL || "https://your-server-app.onrender.com"
     );
   }
 

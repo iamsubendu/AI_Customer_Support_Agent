@@ -1,6 +1,6 @@
 # 🧠 AI Customer Support Agent
 
-A full-stack AI-powered customer support chat application built with React, Node.js, Express, MongoDB, and OpenRouter.ai integration. Features embedded message storage, modern UI, and deployment-ready configuration for both Vercel and Render.
+A full-stack AI-powered customer support chat application built with React, Node.js, Express, MongoDB, and OpenRouter.ai integration. Features embedded message storage, modern UI, and deployment-ready configuration for Netlify (client) and Render (server).
 
 ## 🚀 Features
 
@@ -51,7 +51,7 @@ A full-stack AI-powered customer support chat application built with React, Node
 
 - **Docker containerization** for all services
 - **Docker Compose** for easy local deployment
-- **Vercel deployment** configuration for serverless
+- **Render deployment** configuration for server
 - **Render deployment** configuration for traditional hosting
 - **Netlify deployment** for frontend
 - **Environment configuration** management
@@ -67,7 +67,7 @@ A full-stack AI-powered customer support chat application built with React, Node
 | **AI Service**       | OpenRouter.ai API                    |
 | **Authentication**   | JWT + bcryptjs                       |
 | **State Management** | Redux Toolkit                        |
-| **Deployment**       | Vercel, Render, Netlify              |
+| **Deployment**       | Render (Server), Netlify (Client)    |
 | **Containerization** | Docker, Docker Compose               |
 | **Styling**          | Custom CSS with modern design        |
 
@@ -207,7 +207,7 @@ CORS_ORIGIN=http://localhost:3000
 VITE_API_URL=http://localhost:5000
 
 # For production, change to your server URL:
-# VITE_API_URL=https://your-server-app.vercel.app
+# VITE_API_URL=https://your-server-app.onrender.com
 ```
 
 ### MongoDB Setup
@@ -258,9 +258,7 @@ AI_Customer_Support_Server/
 │   ├── models/               # MongoDB models (Chat with embedded messages)
 │   ├── routes/               # API routes
 │   ├── services/             # Business logic (AI service)
-│   ├── api/                  # Vercel serverless functions
 │   ├── Dockerfile            # Docker configuration
-│   ├── vercel.json           # Vercel configuration
 │   ├── render.yaml           # Render configuration
 │   ├── env.example           # Environment variables template
 │   └── package.json
@@ -357,19 +355,6 @@ Use the provided deployment script:
 2. Update `CORS_ORIGIN` environment variable to your Netlify URL
 3. Redeploy the server
 
-#### Option 2: Vercel + Netlify (Alternative)
-
-**Server (Vercel):**
-
-1. Connect your GitHub repository to Vercel
-2. Set root directory to `server`
-3. Add environment variables in Vercel dashboard
-4. Deploy automatically on push
-
-**Client (Netlify):**
-
-1. Same as Option 1, but use Vercel URL for `VITE_API_URL`
-
 #### Option 3: Docker Compose
 
 ```bash
@@ -398,8 +383,6 @@ CORS_ORIGIN=https://your-netlify-app.netlify.app
 ```
 VITE_API_URL=https://your-server-app.onrender.com
 ```
-
-#### Vercel (Server) - Alternative
 
 ```
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/ai-customer-support
