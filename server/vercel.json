@@ -14,9 +14,7 @@
   ],
   "env": {
     "NODE_ENV": "production",
-    "VERCEL": "1",
-    "PORT": "3000",
-    "CORS_ORIGIN": "https://your-netlify-app.netlify.app"
+    "VERCEL": "1"
   },
   "functions": {
     "api/index.js": {

@@ -93,10 +93,10 @@ const checkAIService = async () => {
   }
 };
 
-const PORT = process.env.PORT || 5000;
-
-// Only start the server if not in Vercel production environment
+// Only start the server if not in Vercel environment
 if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 5000;
+
   app.listen(PORT, async () => {
     console.log(`🚀 Server is running on port ${PORT}`);
     console.log(
