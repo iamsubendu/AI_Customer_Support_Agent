@@ -1,20 +1,25 @@
 const mongoose = require("mongoose");
 
-const messageSchema = new mongoose.Schema({
-  role: {
-    type: String,
-    enum: ["user", "assistant"],
-    required: true,
+const messageSchema = new mongoose.Schema(
+  {
+    role: {
+      type: String,
+      enum: ["user", "assistant"],
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
+    timestamp: {
+      type: Date,
+      default: Date.now,
+    },
   },
-  content: {
-    type: String,
-    required: true,
-  },
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 const chatSchema = new mongoose.Schema(
   {
@@ -27,11 +32,11 @@ const chatSchema = new mongoose.Schema(
       type: String,
       default: "New Chat",
     },
-    messages: [messageSchema],
     lastMessageAt: {
       type: Date,
       default: Date.now,
     },
+    messages: [messageSchema],
   },
   {
     timestamps: true,

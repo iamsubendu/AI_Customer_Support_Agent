@@ -3,6 +3,7 @@ import Button from "../custom/Button";
 
 const ChatItem = ({ chat, isActive, onSelect, onDelete }) => {
   const formatTime = (dateString) => {
+    // Handle both ISO strings and Date objects for backward compatibility
     const date = new Date(dateString);
     const now = new Date();
     const diffInHours = (now - date) / (1000 * 60 * 60);
@@ -27,27 +28,19 @@ const ChatItem = ({ chat, isActive, onSelect, onDelete }) => {
   };
 
   return (
-    <div className="flex items-center group">
+    <div className="chat-item-wrapper">
       <button
         onClick={() => onSelect(chat)}
-        className={`flex-1 text-left p-3 rounded-lg transition-colors duration-200 ${
-          isActive
-            ? "bg-blue-600 text-white"
-            : "bg-gray-700 text-gray-200 hover:bg-gray-600"
-        }`}
+        className={`chat-item ${isActive ? "active" : ""}`}
       >
-        <div className="font-medium truncate mb-1">{chat.title}</div>
-        <div
-          className={`text-xs ${isActive ? "text-blue-100" : "text-gray-400"}`}
-        >
-          {formatTime(chat.lastMessageAt)}
-        </div>
+        <div className="chat-title">{chat.title}</div>
+        <div className="chat-time">{formatTime(chat.lastMessageAt)}</div>
       </button>
       <Button
-        variant="ghost"
+        variant="link"
         size="small"
         onClick={handleDelete}
-        className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-red-400 hover:text-red-300"
+        className="delete-btn"
       >
         ×
       </Button>

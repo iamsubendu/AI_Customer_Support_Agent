@@ -1,12 +1,21 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { authAPI } from "../../services/api";
 
-const initialState = {
-  user: null,
-  token: localStorage.getItem("token"),
-  loading: false,
-  error: null,
+// Function to get initial state from localStorage
+const getInitialState = () => {
+  const token = localStorage.getItem("token");
+  const userData = localStorage.getItem("user");
+
+  return {
+    user: userData ? JSON.parse(userData) : null,
+    token: token,
+    loading: false,
+    error: null,
+    authChecked: !!(token && userData), // Set to true if we have both token and user data
+  };
 };
+
+const initialState = getInitialState();
 
 export const loginUser = createAsyncThunk(
   "auth/login",
@@ -14,6 +23,7 @@ export const loginUser = createAsyncThunk(
     try {
       const response = await authAPI.login(email, password);
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Login failed");
@@ -27,6 +37,7 @@ export const signupUser = createAsyncThunk(
     try {
       const response = await authAPI.signup(name, email, password);
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Signup failed");
@@ -39,9 +50,11 @@ export const getCurrentUser = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await authAPI.getCurrentUser();
+      localStorage.setItem("user", JSON.stringify(response.data.user));
       return response.data;
     } catch (error) {
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
       return rejectWithValue(
         error.response?.data?.message || "Authentication failed"
       );
@@ -57,7 +70,9 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       state.error = null;
+      state.authChecked = false;
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
     },
     clearError: (state) => {
       state.error = null;
@@ -74,6 +89,7 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.error = null;
+        state.authChecked = true;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -88,6 +104,7 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.error = null;
+        state.authChecked = true;
       })
       .addCase(signupUser.rejected, (state, action) => {
         state.loading = false;
@@ -100,12 +117,14 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload.user;
         state.error = null;
+        state.authChecked = true;
       })
       .addCase(getCurrentUser.rejected, (state, action) => {
         state.loading = false;
         state.user = null;
         state.token = null;
         state.error = action.payload;
+        state.authChecked = true;
       });
   },
 });

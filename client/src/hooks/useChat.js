@@ -8,19 +8,30 @@ import {
   setCurrentChat,
   clearMessages,
   setTyping,
-  addUserMessage,
   clearError,
+  startNewChat as startNewChatAction,
 } from "../store/slices/chatSlice";
 
 export const useChat = () => {
   const dispatch = useDispatch();
-  const { chats, currentChat, messages, loading, sending, typing, error } =
-    useSelector((state) => state.chat);
+  const {
+    chats,
+    currentChat,
+    messages,
+    loading,
+    sending,
+    typing,
+    error,
+    historyLoaded,
+  } = useSelector((state) => state.chat);
 
   const loadHistory = useCallback(async () => {
-    const result = await dispatch(loadChatHistory());
-    return result;
-  }, [dispatch]);
+    if (!historyLoaded && !loading) {
+      const result = await dispatch(loadChatHistory());
+      return result;
+    }
+    return { type: "chat/loadHistory/skipped" };
+  }, [dispatch, historyLoaded, loading]);
 
   const loadMessages = useCallback(
     async (chatId) => {
@@ -32,7 +43,7 @@ export const useChat = () => {
 
   const sendChatMessage = useCallback(
     async (message, chatId) => {
-      dispatch(addUserMessage(message));
+      // Don't add user message immediately - let server response handle all messages
       const result = await dispatch(sendMessage({ message, chatId }));
       return result;
     },
@@ -54,9 +65,10 @@ export const useChat = () => {
     [dispatch]
   );
 
-  const startNewChat = useCallback(() => {
-    dispatch(setCurrentChat(null));
-    dispatch(clearMessages());
+  const startNewChat = useCallback(async () => {
+    dispatch(startNewChatAction());
+    // Refresh chat history after starting new chat
+    await dispatch(loadChatHistory());
   }, [dispatch]);
 
   const setTypingStatus = useCallback(
@@ -81,6 +93,7 @@ export const useChat = () => {
     loadHistory,
     loadMessages,
     sendMessage: sendChatMessage,
+    sendChatMessage,
     deleteChat: deleteChatById,
     selectChat,
     startNewChat,

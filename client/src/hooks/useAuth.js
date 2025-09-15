@@ -7,10 +7,13 @@ import {
   logout,
   clearError,
 } from "../store/slices/authSlice";
+import { resetChatState } from "../store/slices/chatSlice";
 
 export const useAuth = () => {
   const dispatch = useDispatch();
-  const { user, token, loading, error } = useSelector((state) => state.auth);
+  const { user, token, loading, error, authChecked } = useSelector(
+    (state) => state.auth
+  );
 
   const login = useCallback(
     async (email, password) => {
@@ -29,15 +32,32 @@ export const useAuth = () => {
   );
 
   const checkAuth = useCallback(async () => {
-    if (token) {
+    if (authChecked) {
+      return { type: "auth/getCurrentUser/skipped" };
+    }
+
+    const storedToken = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
+
+    // If we have both token and user data, we're already authenticated
+    if (storedToken && storedUser) {
+      return { type: "auth/getCurrentUser/skipped" };
+    }
+
+    // If we have token but no user data, fetch user data
+    if (storedToken && !storedUser) {
       const result = await dispatch(getCurrentUser());
       return result;
     }
+
     return { type: "auth/getCurrentUser/rejected" };
-  }, [dispatch, token]);
+  }, [dispatch, authChecked]);
 
   const logoutUser = useCallback(() => {
     dispatch(logout());
+    dispatch(resetChatState());
+    // Redirect to login page after logout
+    window.location.href = "/auth";
   }, [dispatch]);
 
   const clearAuthError = useCallback(() => {
@@ -54,6 +74,6 @@ export const useAuth = () => {
     checkAuth,
     logout: logoutUser,
     clearError: clearAuthError,
-    isAuthenticated: !!user,
+    isAuthenticated: !!(user && token),
   };
 };

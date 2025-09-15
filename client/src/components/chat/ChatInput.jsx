@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import Button from "../custom/Button";
-import Textarea from "../custom/Textarea";
 
 const ChatInput = ({ onSendMessage, disabled }) => {
   const [message, setMessage] = useState("");
@@ -30,22 +29,22 @@ const ChatInput = ({ onSendMessage, disabled }) => {
   }, [message]);
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-3 p-4 bg-white border-t">
-      <Textarea
+    <form className="input-container" onSubmit={handleSubmit}>
+      <textarea
         ref={textareaRef}
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         onKeyPress={handleKeyPress}
-        placeholder="Type your message here... (Press Enter to send, Shift+Enter for new line)"
+        placeholder="Type your message here... (Press Enter)"
         disabled={disabled}
         rows={1}
-        className="flex-1 min-h-[44px] max-h-[120px]"
+        className="message-input"
       />
       <Button
         type="submit"
         disabled={disabled || !message.trim()}
         loading={disabled}
-        className="self-end"
+        className="send-btn"
       >
         {disabled ? "Sending..." : "Send"}
       </Button>

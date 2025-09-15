@@ -3,8 +3,6 @@ import { addToast } from "../store/slices/uiSlice";
 
 class ErrorHandler {
   static handle(error, context = "") {
-    console.error(`Error in ${context}:`, error);
-
     let message = "An unexpected error occurred";
 
     if (error.response) {

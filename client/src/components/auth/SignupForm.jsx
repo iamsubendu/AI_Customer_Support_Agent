@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import { useAuth } from "../../hooks/useAuth";
-import { useToast } from "../../hooks/useToast";
 import Button from "../custom/Button";
 import Input from "../custom/Input";
 
@@ -12,9 +13,16 @@ const SignupForm = ({ onToggleMode }) => {
     confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
-  const { signup, loading } = useAuth();
-  const { showError, showSuccess } = useToast();
+  const { signup, loading, isAuthenticated } = useAuth();
+
+  // Redirect when authentication state changes
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/chat", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -63,19 +71,32 @@ const SignupForm = ({ onToggleMode }) => {
     );
 
     if (result.type.endsWith("/fulfilled")) {
-      showSuccess("Account created successfully!");
+      toast.success("Account created successfully!");
+      // Redirect will be handled by useEffect when isAuthenticated becomes true
     } else {
-      showError(result.payload || "Signup failed");
+      toast.error(result.payload || "Signup failed");
     }
   };
 
   return (
-    <div className="w-full max-w-md mx-auto">
-      <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
-        Create Account
-      </h1>
+    <div className="auth-form-container">
+      <h1 className="auth-title">Create Account</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="auth-form" autoComplete="off">
+        {/* Hidden fields to prevent autofill */}
+        <input
+          type="text"
+          style={{ display: "none" }}
+          tabIndex="-1"
+          autoComplete="off"
+        />
+        <input
+          type="password"
+          style={{ display: "none" }}
+          tabIndex="-1"
+          autoComplete="off"
+        />
+
         <Input
           label="Full Name"
           type="text"
@@ -85,6 +106,9 @@ const SignupForm = ({ onToggleMode }) => {
           error={errors.name}
           placeholder="Enter your full name"
           required
+          autoComplete="off"
+          data-lpignore="true"
+          data-form-type="other"
         />
 
         <Input
@@ -96,6 +120,9 @@ const SignupForm = ({ onToggleMode }) => {
           error={errors.email}
           placeholder="Enter your email"
           required
+          autoComplete="off"
+          data-lpignore="true"
+          data-form-type="other"
         />
 
         <Input
@@ -107,6 +134,9 @@ const SignupForm = ({ onToggleMode }) => {
           error={errors.password}
           placeholder="Create a password"
           required
+          autoComplete="new-password"
+          data-lpignore="true"
+          data-form-type="other"
         />
 
         <Input
@@ -118,6 +148,9 @@ const SignupForm = ({ onToggleMode }) => {
           error={errors.confirmPassword}
           placeholder="Confirm your password"
           required
+          autoComplete="new-password"
+          data-lpignore="true"
+          data-form-type="other"
         />
 
         <Button
@@ -130,12 +163,8 @@ const SignupForm = ({ onToggleMode }) => {
         </Button>
       </form>
 
-      <div className="text-center mt-6">
-        <button
-          type="button"
-          onClick={onToggleMode}
-          className="text-blue-600 hover:text-blue-700 font-medium"
-        >
+      <div className="auth-switch">
+        <button type="button" onClick={onToggleMode} className="btn-link">
           Already have an account? Sign in
         </button>
       </div>
