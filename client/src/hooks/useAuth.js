@@ -41,7 +41,15 @@ export const useAuth = () => {
 
     // If we have both token and user data, we're already authenticated
     if (storedToken && storedUser) {
-      return { type: "auth/getCurrentUser/skipped" };
+      // Dispatch a fulfilled action to set the auth state
+      dispatch({
+        type: "auth/getCurrentUser/fulfilled",
+        payload: {
+          user: JSON.parse(storedUser),
+          token: storedToken,
+        },
+      });
+      return { type: "auth/getCurrentUser/fulfilled" };
     }
 
     // If we have token but no user data, fetch user data

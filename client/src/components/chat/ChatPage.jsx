@@ -41,13 +41,29 @@ const ChatPage = () => {
       hasLoadedHistory.current = true;
       loadHistory();
     }
-  }, [historyLoaded, loading, loadHistory, isAuthenticated]);
+  }, [historyLoaded, loading, isAuthenticated]);
 
   useEffect(() => {
     if (currentChat) {
       loadMessages(currentChat.id);
     }
   }, [currentChat, loadMessages]);
+
+  // Fallback: Ensure chat history is loaded after authentication
+  useEffect(() => {
+    if (
+      isAuthenticated &&
+      !historyLoaded &&
+      !loading &&
+      !hasLoadedHistory.current
+    ) {
+      const timer = setTimeout(() => {
+        hasLoadedHistory.current = true;
+        loadHistory();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isAuthenticated, historyLoaded, loading, loadHistory]);
 
   useEffect(() => {
     if (error) {

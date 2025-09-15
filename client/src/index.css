@@ -721,8 +721,7 @@ body {
 }
 
 .chat-item {
-  padding: 0.75rem 1rem;
-  margin-bottom: 0.25rem;
+  padding: 0.25rem 0.5rem;
   background: transparent;
   border-radius: 6px;
   cursor: pointer;
@@ -730,6 +729,11 @@ body {
   border: none;
   color: #ececf1;
   text-align: left;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
   width: 100%;
 }
 
@@ -739,6 +743,15 @@ body {
 
 .chat-item.active {
   background: #343541;
+}
+
+.chat-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: hidden;
 }
 
 .chat-title {
@@ -1157,8 +1170,6 @@ body {
   }
 
   .message-input {
-    min-height: 48px;
-    height: 48px;
     padding: 1rem 1.5rem;
   }
 
@@ -1225,8 +1236,142 @@ body {
   }
 }
 
+/* Confirmation Modal Styles */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  max-width: 400px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  animation: modalSlideIn 0.2s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1.5rem 0 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 1rem;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.modal-close:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.modal-body {
+  padding: 0 1.5rem 1rem 1.5rem;
+}
+
+.modal-message {
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem 1.5rem 1.5rem;
+  justify-content: flex-end;
+}
+
+.modal-cancel-btn {
+  min-width: 80px;
+}
+
+.modal-confirm-btn {
+  min-width: 80px;
+}
+
 /* Mobile Responsive Design */
 @media (max-width: 768px) {
+  /* Mobile Modal Adjustments */
+  .modal-backdrop {
+    padding: 0.5rem;
+  }
+
+  .modal-content {
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .modal-header {
+    padding: 1rem 1rem 0 1rem;
+  }
+
+  .modal-body {
+    padding: 0 1rem 1rem 1rem;
+  }
+
+  .modal-footer {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .modal-cancel-btn,
+  .modal-confirm-btn {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .delete-btn {
+    opacity: 1;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    min-width: 36px;
+    min-height: 36px;
+    flex-shrink: 0;
+  }
   .menu-button {
     display: block;
     position: fixed;
@@ -1746,25 +1891,41 @@ body {
 .chat-item-wrapper {
   display: flex;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
   position: relative;
+  gap: 0.5rem;
+  padding: 0.25rem;
+  border-radius: 8px;
+  background: transparent;
+  transition: background-color 0.2s ease;
 }
 
-.chat-item-wrapper:hover .delete-btn {
-  opacity: 1;
+.chat-item-wrapper:hover {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .delete-btn {
-  position: absolute;
-  right: 0.5rem;
-  opacity: 0;
-  transition: opacity 0.2s;
+  opacity: 1;
   color: #e74c3c;
-  background: none;
-  border: none;
-  font-size: 1.25rem;
+  background: rgba(231, 76, 60, 0.1);
+  border: 1px solid #e74c3c;
+  font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
   padding: 0.25rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  min-height: 28px;
+  transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+  background: rgba(231, 76, 60, 0.1);
+  color: #c0392b;
 }
 
 .logout-btn {

@@ -2,8 +2,10 @@
 const getApiUrl = () => {
   // Check if we're in production
   if (import.meta.env.PROD) {
-    // In production, use the Vercel deployment URL
-    return import.meta.env.VITE_API_URL || "https://your-server-app.vercel.app";
+    // In production, use the Render deployment URL
+    return (
+      import.meta.env.VITE_API_URL
+    );
   }
 
   // In development, use localhost

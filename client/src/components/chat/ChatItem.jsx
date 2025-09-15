@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../custom/Button";
+import ConfirmationModal from "../custom/ConfirmationModal";
 
 const ChatItem = ({ chat, isActive, onSelect, onDelete }) => {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   const formatTime = (dateString) => {
     // Handle both ISO strings and Date objects for backward compatibility
     const date = new Date(dateString);
@@ -20,30 +23,52 @@ const ChatItem = ({ chat, isActive, onSelect, onDelete }) => {
     }
   };
 
-  const handleDelete = (e) => {
+  const handleDeleteClick = (e) => {
+    e.preventDefault();
     e.stopPropagation();
-    if (window.confirm("Are you sure you want to delete this chat?")) {
-      onDelete(chat.id);
-    }
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = () => {
+    onDelete(chat.id);
+  };
+
+  const handleChatSelect = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onSelect(chat);
   };
 
   return (
     <div className="chat-item-wrapper">
       <button
-        onClick={() => onSelect(chat)}
+        onClick={handleChatSelect}
         className={`chat-item ${isActive ? "active" : ""}`}
       >
-        <div className="chat-title">{chat.title}</div>
-        <div className="chat-time">{formatTime(chat.lastMessageAt)}</div>
+        <div className="chat-content">
+          <div className="chat-title">{chat.title}</div>
+          <div className="chat-time">{formatTime(chat.lastMessageAt)}</div>
+        </div>
       </button>
-      <Button
-        variant="link"
-        size="small"
-        onClick={handleDelete}
+      <button
+        type="button"
+        onClick={handleDeleteClick}
         className="delete-btn"
+        aria-label="Delete chat"
       >
         ×
-      </Button>
+      </button>
+
+      <ConfirmationModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Chat"
+        message="Are you sure you want to delete this chat? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        confirmVariant="danger"
+      />
     </div>
   );
 };

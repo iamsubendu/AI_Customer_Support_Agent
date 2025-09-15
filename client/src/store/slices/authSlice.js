@@ -11,7 +11,7 @@ const getInitialState = () => {
     token: token,
     loading: false,
     error: null,
-    authChecked: !!(token && userData), // Set to true if we have both token and user data
+    authChecked: false, // Always start as false, let checkAuth handle it
   };
 };
 
